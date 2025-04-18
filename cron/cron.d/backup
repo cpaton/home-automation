@@ -1,0 +1,1 @@
+0 1 * * * root pwsh -NoProfile -NonInteractive -Command /cron/backup.ps1

@@ -1,0 +1,112 @@
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - "9000:9000/tcp"
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/portainer:/data
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    ports:
+      - "8123:8123/tcp"
+    volumes:
+      - /opt/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      home-assistant:
+        ipv4_address: 192.168.10.50
+    # privileged: true
+    # network_mode: host
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - /opt/mosquitto:/mosquitto
+      - /opt/mosquitto/data:/mosquitto/data
+      - /opt/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001
+    restart: unless-stopped
+    networks:
+      home-assistant:
+        ipv4_address: 192.168.10.51
+
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt
+    container_name: zigbee2mqtt
+    devices:
+      # - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_d654d75df36aef11b1d199adc169b110-if00-port0:/dev/ttyACM0
+      - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_d654d75df36aef11b1d199adc169b110-if00-port0:/dev/ttyUSB0
+    volumes:
+      - /opt/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8080:8080
+    environment:
+      - TZ=Europe/London
+    restart: unless-stopped
+    networks:
+      home-assistant:
+        ipv4_address: 192.168.10.52
+
+  multicast-relay:
+    image: scyto/multicast-relay
+    container_name: multicast-relay
+    environment:
+      OPTS: --noMDNS
+      INTERFACES: eno1 enp4s0
+    restart: always
+    network_mode: host
+
+  # https://github.com/abraunegg/onedrive/tree/master
+  onedrive:
+    image: driveone/onedrive:debian
+    container_name: onedrive
+    restart: unless-stopped
+    environment:
+      ONEDRIVE_UID: 1000
+      ONEDRIVE_GID: 1000
+      ONEDRIVE_UPLOADONLY: 1
+      ONEDRIVE_SINGLE_DIRECTORY: home-automation-backup
+      ONEDRIVE_DRYRUN: 0
+    volumes:
+      - /opt/home-automation/onedrive/config:/onedrive/conf
+      - /home/craig/OneDrive:/onedrive/data
+      - /var/log/onedrive:/var/log/onedrive
+
+  cron:
+    image: cpaton/cron:latest
+    container_name: cron
+    restart: unless-stopped
+    volumes:
+     - /opt/home-automation/cron/scripts:/cron
+     - /opt/home-automation/cron/cron.d:/etc/cron.d
+
+  # ewelink:
+  #   container_name: ewelink_smart_home
+  #   image: ewelink_smart_home
+  #   restart: unless-stopped
+  #   environment:
+  #     HA_URL: http://bee.lt.lan:8123
+  #     SUPERVISOR_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjNjFkZDMyNmNmNWU0NTg4OWI5ODViYjVhYTM3MDk3NiIsImlhdCI6MTc0MTIxMzI0OSwiZXhwIjoyMDU2NTczMjQ5fQ.4NyMrMBwgMkv_LRbvw49UkXzyWrcBd71rhOeB23RDQs
+  #   ports:
+  #     - "3000:3000/tcp"
+  #   volumes:
+  #     - /opt/ewelink:/data
+  #   networks:
+  #     home-assistant:
+  #       ipv4_address: 192.168.10.55
+
+networks:
+  home-assistant:
+    name: lt-lan
+    external: true
