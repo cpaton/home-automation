@@ -91,6 +91,7 @@ services:
     volumes:
      - /opt/home-automation/cron/scripts:/cron
      - /opt/home-automation/cron/cron.d:/etc/cron.d
+     - /var/run/docker.sock:/var/run/docker.sock
 
   # ewelink:
   #   container_name: ewelink_smart_home
