@@ -59,6 +59,19 @@ services:
       home-assistant:
         ipv4_address: 192.168.10.52
 
+  esphome:
+    image: ghcr.io/esphome/esphome
+    container_name: esphome
+    volumes:
+      - /opt/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "6052:6052/tcp"
+    restart: unless-stopped
+    networks:
+      home-assistant:
+        ipv4_address: 192.168.10.53
+
   multicast-relay:
     image: scyto/multicast-relay
     container_name: multicast-relay
