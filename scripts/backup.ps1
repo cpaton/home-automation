@@ -25,10 +25,27 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 try {
     $foldersToBackup = @(
-        "/opt/homeassistant/"
-        "/opt/mosquitto/"
-        # "/opt/portainer/"
-        "/opt/zigbee2mqtt/"
+        @{
+            Path = "/opt/homeassistant/"
+            ExcludePatterns = @(
+                "config/home-assistant.log*"
+            )
+        }
+        @{
+            Path = "/opt/mosquitto/"
+            ExcludePatterns = @(
+                "log"
+                "log/*"
+            )
+        }
+        @{
+            Path = "/opt/zigbee2mqtt/"
+            ExcludePatterns = @(
+                "data/log"
+                "data/log/*"
+                "data/log/*/*"
+            )
+        }
     )
 
     $backupFilenamePrefix = "home-automation-backup-"
@@ -48,9 +65,15 @@ try {
         "--recursion"
         "--verbose"
     )
-    foreach ($folder in $foldersToBackup) {
+    foreach ($folderToBackup in $foldersToBackup) {
+        $folder = $folderToBackup.Path
         $folderParent = Split-Path -Path $folder -Parent
         $folderName = Split-Path -Path $folder -Leaf
+
+        foreach ($excludePattern in $folderToBackup.ExcludePatterns) {
+            $tarArguments += "--exclude=$($folderName)/$excludePattern"
+        }
+
         $tarArguments += "--directory=$folderParent"
         $tarArguments += "$folderName"
     }
