@@ -42,7 +42,7 @@ services:
         ipv4_address: 192.168.10.51
 
   zigbee2mqtt:
-    image: koenkk/zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.7
     container_name: zigbee2mqtt
     devices:
       # - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_d654d75df36aef11b1d199adc169b110-if00-port0:/dev/ttyACM0
