@@ -1,0 +1,62 @@
+[
+    {
+        "Name": "lt-lan",
+        "Id": "5defa8cbf4bb14d14855ae444732d2d8cf22b4c2ddac72b8bbb7adbff4fd6f5c",
+        "Created": "2025-03-04T23:51:08.582514048Z",
+        "Scope": "local",
+        "Driver": "macvlan",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "192.168.10.0/24",
+                    "Gateway": "192.168.10.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "24d7d1b3e36a42179ad8bac1f55fca7a2534bc9dc0ec9adc3f39f2e60b63fc15": {
+                "Name": "esphome",
+                "EndpointID": "3bcff2fb7165966b5404e6c659bfc787bf435f4cf982a01719f8b1d08b7fff32",
+                "MacAddress": "62:72:ed:3b:3e:02",
+                "IPv4Address": "192.168.10.53/24",
+                "IPv6Address": ""
+            },
+            "487eaf7533bf9228eb977c9eb0963225440004a1674f5b590d61b1ad35f5d321": {
+                "Name": "homeassistant",
+                "EndpointID": "bf4bf7638f96391ee8c7e14ff4f1ee5af55f175677d6317945b3daa48e5ad9a3",
+                "MacAddress": "aa:1e:3c:9a:bb:60",
+                "IPv4Address": "192.168.10.50/24",
+                "IPv6Address": ""
+            },
+            "a2918ff03e8a0c58282256298451f661b83cf56f758ba35c9ad03bc7cff21f18": {
+                "Name": "zigbee2mqtt",
+                "EndpointID": "2f0bf6b51eff5b456c179053511f9745498dc914781e639f22b6a0c58dc81e55",
+                "MacAddress": "fe:de:bb:9d:9f:e0",
+                "IPv4Address": "192.168.10.52/24",
+                "IPv6Address": ""
+            },
+            "c463932e9ef25bf98de22dc278ce9a3771ae0ad83dfeb941c7e59d7e59200834": {
+                "Name": "mosquitto",
+                "EndpointID": "de0ffed77c6340d3b364b7adb0ebd58376e7064bb0869a7b22523f5b19abac40",
+                "MacAddress": "6e:d0:b8:09:69:90",
+                "IPv4Address": "192.168.10.51/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "parent": "enp4s0"
+        },
+        "Labels": {}
+    }
+]
