@@ -46,6 +46,14 @@ try {
                 "data/log/*/*"
             )
         }
+        @{
+            Path = "/opt/esphome/"
+            ExcludePatterns = @()
+        }
+        @{
+            Path = "/opt/ewelink/"
+            ExcludePatterns = @()
+        }
     )
 
     $backupFilenamePrefix = "home-automation-backup-"
