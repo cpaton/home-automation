@@ -60,7 +60,7 @@ services:
         ipv4_address: 192.168.10.52
 
   esphome:
-    image: ghcr.io/esphome/esphome
+    image: ghcr.io/esphome/esphome:2025.12.3
     container_name: esphome
     volumes:
       - /opt/esphome:/config
